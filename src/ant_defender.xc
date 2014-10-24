@@ -219,23 +219,22 @@ void led_controller(out port quadrant, chanend communication_channel) {
     }
 }
 
-
-void display_ant(Ant *ant, chanend led_clocks[]) {
+void display_ant(Position position, chanend led_clocks[]) {
     // TODO: See if the chanends can be refactored into an array
-    int quadrant_number = get_quadrant(ant->position);
-    int position = ant->position % 3;
+    int quadrant_number = get_quadrant(position);
+    int led_position = position % 3;
     switch(quadrant_number) {
     case 1:
-        led_clocks[0] <: position;
+        led_clocks[0] <: led_position;
         break;
     case 2:
-        led_clocks[1] <: position;
+        led_clocks[1] <: led_position;
         break;
     case 3:
-        led_clocks[2] <: position;
+        led_clocks[2] <: led_position;
         break;
     case 4:
-        led_clocks[3] <: position;
+        led_clocks[3] <: led_position;
         break;
     }
 }
@@ -249,7 +248,7 @@ int main(void) {
         on stdcore[0]: {
             cledR <: 1; // Use red LED
             Ant defender = create_defender_ant();
-            display_ant(&defender, led_clock);
+            display_ant(defender.position, led_clock);
             while (1) ;
         }
         on stdcore[1]: {
